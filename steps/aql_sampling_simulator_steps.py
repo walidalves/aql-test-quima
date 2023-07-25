@@ -1,26 +1,23 @@
 from behave import *
-from playwright.sync_api import sync_playwright
 import time
-
 from pages.aql_page import AqlPage
+from pages.enviroment import TestEnvironment
 
+# Chama o método before_all diretamente da classe TestEnvironment
+TestEnvironment.before_all()
 
 @given('we are on the AQL web site')
 def step_impl_given(context):
-    with sync_playwright() as p:
-        browser_instance = p.chromium.launch(headless=False)
-        page = browser_instance.new_page()
-        context.aql_page = AqlPage(page)
-        context.aql_page.open_website()
-        context.aql_page.accept_cookies()
-        if context.aql_page.is_modal_visible():
-            context.aql_page.close_modal()
-        else:
-            pass
+    TestEnvironment.before_scenario(context)
+    context.aql_page = AqlPage(context.test_environment.page)
+    context.aql_page.open_website()
+    context.aql_page.accept_cookies()
+    context.aql_page.close_modal()
 
 
 @when('we complete all fields of AQL Sampling Simulator')
 def step_impl_when(context):
+    time.sleep(5)
     context.aql_page.fill_quantity_with_random_number()
 
 
@@ -28,4 +25,5 @@ def step_impl_when(context):
 def step_impl_then(context):
     context.aql_page.verify_value_points()
     context.aql_page.close_page()
+    context.browser_instance.close()
     time.sleep(2)
