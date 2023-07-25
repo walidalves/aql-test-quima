@@ -11,12 +11,11 @@ class AqlPage:
 
     def fill_quantity_with_random_number(self):
         # Generate random number
-        random_number = random.randint(2, 214748366)
+        random_number = random.randrange(2, 214746)
 
         # Fill with the random number
-        quantity_input = self.page.wait_for_selector("input[name=\"aql-calculator-quantity\"]")
+        quantity_input = self.page.locator("input[name=\"aql-calculator-quantity\"]")
         quantity_input.fill(str(random_number))
-
 
     def accept_cookies(self):
         button_accept_cookies_selector = '#CybotCookiebotDialogBodyButtonAccept'
@@ -24,7 +23,6 @@ class AqlPage:
         button_accept_cookies.click()
 
     def is_modal_visible(self):
-        # Defina o seletor para o modal que deseja verificar a visibilidade
         modal_selector = 'button[title="Close (Esc)"].mfp-close'
         modal_element = self.page.locator(modal_selector)
         return modal_element.is_visible()

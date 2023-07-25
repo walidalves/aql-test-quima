@@ -1,0 +1,33 @@
+from time import sleep
+from playwright.sync_api import sync_playwright
+from pages.aql_page import AqlPage
+import random
+
+with sync_playwright() as p:
+    browser = p.chromium.launch(headless=False)
+
+    context = browser.new_context(
+        color_scheme='light'
+
+    )
+
+    page = context.new_page()
+    page.goto('https://www.qima.com/aql-acceptable-quality-limit')
+
+    # Gerar um número aleatório entre 1000 e 9999
+    random_number = random.randrange(1000, 10000)
+
+    # Preencher o campo com o número aleatório gerado
+    page.locator("input[name=\"aql-calculator-quantity\"]").fill(str(random_number))
+    sleep(5)
+    print(page.title())
+    browser.close()
+
+
+    def fill_quantity_with_random_number(self):
+        # Generate random number
+        random_number = random.randint(2, 214748366)
+
+        # Fill with the random number
+        quantity_input = self.page.wait_for_selector("input[name=\"aql-calculator-quantity\"]")
+        quantity_input.fill(str(random_number))
